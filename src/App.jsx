@@ -4,6 +4,7 @@ import TaskList from "./components/tasks/TaskList";
 import AddTask from "./components/tasks/AddTask";
 import HabitList from "./components/habits/HabitList";
 import Analytics from "./components/analytics/Analytics";
+import CommandPalette from "./components/command/CommandPalette";
 
 const defaultTasks = [
   {
@@ -66,67 +67,54 @@ const defaultHabits = [
 function App() {
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("dayflow-tasks");
-    return savedTasks
-      ? JSON.parse(savedTasks)
-      : defaultTasks;
+    return savedTasks ? JSON.parse(savedTasks) : defaultTasks;
   });
   const [habits, setHabits] = useState(() => {
-  const savedHabits = localStorage.getItem("dayflow-habits");
-  return savedHabits
-    ? JSON.parse(savedHabits)
-    : defaultHabits;
-});
-const [activePage, setActivePage] = useState("Today");
-
-useEffect(() => {
-  localStorage.setItem(
-    "dayflow-habits",
-    JSON.stringify(habits)
-  );
-}, [habits]);
+    const savedHabits = localStorage.getItem("dayflow-habits");
+    return savedHabits ? JSON.parse(savedHabits) : defaultHabits;
+  });
+  const [activePage, setActivePage] = useState("Today");
 
   useEffect(() => {
-    localStorage.setItem(
-      "dayflow-tasks",
-      JSON.stringify(tasks)
-    );
+    localStorage.setItem("dayflow-habits", JSON.stringify(habits));
+  }, [habits]);
+
+  useEffect(() => {
+    localStorage.setItem("dayflow-tasks", JSON.stringify(tasks));
   }, [tasks]);
 
   function toggleHabit(habitId, dayIndex) {
-  setHabits((currentHabits) =>
-    currentHabits.map((habit) => {
-      if (habit.id !== habitId) {
-        return habit;
-      }
-
-      const newHistory = [...habit.history];
-
-      newHistory[dayIndex] = !newHistory[dayIndex];
-
-      let streak = 0;
-
-      for (let i = newHistory.length - 1; i >= 0; i--) {
-        if (newHistory[i]) {
-          streak++;
-        } else {
-          break;
+    setHabits((currentHabits) =>
+      currentHabits.map((habit) => {
+        if (habit.id !== habitId) {
+          return habit;
         }
-      }
 
-      return {
-        ...habit,
-        history: newHistory,
-        streak,
-      };
-    })
-  );
-}
+        const newHistory = [...habit.history];
+
+        newHistory[dayIndex] = !newHistory[dayIndex];
+
+        let streak = 0;
+
+        for (let i = newHistory.length - 1; i >= 0; i--) {
+          if (newHistory[i]) {
+            streak++;
+          } else {
+            break;
+          }
+        }
+
+        return {
+          ...habit,
+          history: newHistory,
+          streak,
+        };
+      }),
+    );
+  }
 
   function addTask(task) {
-    setTasks((currentTasks) => [
-      ...currentTasks,
-      task,
-    ]);
+    setTasks((currentTasks) => [...currentTasks, task]);
   }
 
   function toggleTask(id) {
@@ -137,54 +125,36 @@ useEffect(() => {
               ...task,
               completed: !task.completed,
             }
-          : task
-      )
+          : task,
+      ),
     );
   }
 
   function deleteTask(id) {
-    setTasks((currentTasks) =>
-      currentTasks.filter((task) => task.id !== id)
-    );
+    setTasks((currentTasks) => currentTasks.filter((task) => task.id !== id));
   }
 
-  const completedTasks = tasks.filter(
-    (task) => task.completed
-  ).length;
+  const completedTasks = tasks.filter((task) => task.completed).length;
 
   const progress =
-    tasks.length === 0
-      ? 0
-      : Math.round(
-          (completedTasks / tasks.length) * 100
-        );
+    tasks.length === 0 ? 0 : Math.round((completedTasks / tasks.length) * 100);
 
-        if (activePage === "Analytics") {
+  if (activePage === "Analytics") {
     return (
-      <AppLayout
-        activePage={activePage}
-        onNavigate={setActivePage}
-      >
-        <Analytics
-          tasks={tasks}
-          habits={habits}
-        />
+      <AppLayout activePage={activePage} onNavigate={setActivePage}>
+        <Analytics tasks={tasks} habits={habits} />
+
+        <CommandPalette onNavigate={setActivePage} />
       </AppLayout>
     );
   }
 
   return (
-     <AppLayout
-      activePage={activePage}
-      onNavigate={setActivePage}
-    >
+    <AppLayout activePage={activePage} onNavigate={setActivePage}>
       <div className="space-y-8">
-
         {/* Header */}
         <header>
-          <p className="text-sm text-neutral-500">
-            Thursday, August 20, 2026
-          </p>
+          <p className="text-sm text-neutral-500">Thursday, August 20, 2026</p>
 
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Good morning.
@@ -197,15 +167,10 @@ useEffect(() => {
 
         {/* Stats */}
         <section className="grid gap-4 sm:grid-cols-3">
-
           <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
-            <p className="text-sm text-neutral-500">
-              Tasks
-            </p>
+            <p className="text-sm text-neutral-500">Tasks</p>
 
-            <p className="mt-3 text-3xl font-semibold">
-              {tasks.length}
-            </p>
+            <p className="mt-3 text-3xl font-semibold">{tasks.length}</p>
 
             <p className="mt-1 text-sm text-neutral-500">
               {tasks.length - completedTasks} remaining
@@ -213,42 +178,26 @@ useEffect(() => {
           </div>
 
           <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
-            <p className="text-sm text-neutral-500">
-              Completed
-            </p>
+            <p className="text-sm text-neutral-500">Completed</p>
 
-            <p className="mt-3 text-3xl font-semibold">
-              {completedTasks}
-            </p>
+            <p className="mt-3 text-3xl font-semibold">{completedTasks}</p>
 
-            <p className="mt-1 text-sm text-neutral-500">
-              Keep going
-            </p>
+            <p className="mt-1 text-sm text-neutral-500">Keep going</p>
           </div>
 
           <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
-            <p className="text-sm text-neutral-500">
-              Progress
-            </p>
+            <p className="text-sm text-neutral-500">Progress</p>
 
-            <p className="mt-3 text-3xl font-semibold">
-              {progress}%
-            </p>
+            <p className="mt-3 text-3xl font-semibold">{progress}%</p>
 
-            <p className="mt-1 text-sm text-neutral-500">
-              Daily completion
-            </p>
+            <p className="mt-1 text-sm text-neutral-500">Daily completion</p>
           </div>
-
         </section>
 
         {/* Tasks */}
         <section className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50">
-
           <div className="p-5">
-            <h2 className="font-medium">
-              Today's Tasks
-            </h2>
+            <h2 className="font-medium">Today's Tasks</h2>
 
             <p className="mt-1 text-sm text-neutral-500">
               Stay focused on what matters.
@@ -265,54 +214,39 @@ useEffect(() => {
             />
           ) : (
             <div className="p-10 text-center">
-              <p className="text-sm text-neutral-500">
-                No tasks yet.
-              </p>
+              <p className="text-sm text-neutral-500">No tasks yet.</p>
 
               <p className="mt-1 text-xs text-neutral-700">
                 Add something above to get started.
               </p>
             </div>
           )}
-
         </section>
         {/* Habits */}
 
-  <section>
-  <div className="mb-5">
-    <h2 className="text-xl font-semibold">
-      Habits
-    </h2>
+        <section>
+          <div className="mb-5">
+            <h2 className="text-xl font-semibold">Habits</h2>
 
-    <p className="mt-1 text-sm text-neutral-500">
-      Small actions become big results.
-    </p>
-  </div>
+            <p className="mt-1 text-sm text-neutral-500">
+              Small actions become big results.
+            </p>
+          </div>
 
-  <HabitList
-    habits={habits}
-    onToggle={toggleHabit}
-  />
-</section>
+          <HabitList habits={habits} onToggle={toggleHabit} />
+        </section>
         {/* Progress */}
         <section className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
-
           <div className="flex items-center justify-between">
-
             <div>
-              <h2 className="font-medium">
-                Daily Progress
-              </h2>
+              <h2 className="font-medium">Daily Progress</h2>
 
               <p className="mt-1 text-sm text-neutral-500">
                 You're {progress}% through your tasks.
               </p>
             </div>
 
-            <span className="text-2xl font-semibold">
-              {progress}%
-            </span>
-
+            <span className="text-2xl font-semibold">{progress}%</span>
           </div>
 
           <div className="mt-5 h-2 overflow-hidden rounded-full bg-neutral-800">
@@ -321,10 +255,9 @@ useEffect(() => {
               style={{ width: `${progress}%` }}
             />
           </div>
-
         </section>
-
       </div>
+      <CommandPalette onNavigate={setActivePage} />
     </AppLayout>
   );
 }
