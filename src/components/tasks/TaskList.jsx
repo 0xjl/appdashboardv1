@@ -1,10 +1,34 @@
+import { ListTodo } from "lucide-react";
+
 function TaskList({ tasks, onToggle, onDelete }) {
+  // Show empty state when there are no tasks
+  if (tasks.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center px-6 py-14 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-100 dark:bg-neutral-900">
+          <ListTodo
+            size={22}
+            className="text-neutral-500"
+          />
+        </div>
+
+        <h3 className="mt-4 font-medium">
+          You're all caught up
+        </h3>
+
+        <p className="mt-1 max-w-sm text-sm text-neutral-500">
+          Add a task above when something new comes up.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="divide-y divide-neutral-800">
       {tasks.map((task) => (
         <div
           key={task.id}
-          className="group flex items-center gap-4 p-5"
+          className="group flex items-center gap-4 p-5 transition-colors duration-200 hover:bg-neutral-50 dark:hover:bg-neutral-900/60"
         >
           <button
             onClick={() => onToggle(task.id)}

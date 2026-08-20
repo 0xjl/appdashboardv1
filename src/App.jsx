@@ -211,7 +211,7 @@ if (activePage === "Settings") {
 
         {/* Stats */}
         <section className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-neutral-700">
             <p className="text-sm text-neutral-500">Tasks</p>
 
             <p className="mt-3 text-3xl font-semibold">{tasks.length}</p>
@@ -221,7 +221,7 @@ if (activePage === "Settings") {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-neutral-700">
             <p className="text-sm text-neutral-500">Completed</p>
 
             <p className="mt-3 text-3xl font-semibold">{completedTasks}</p>
@@ -229,7 +229,7 @@ if (activePage === "Settings") {
             <p className="mt-1 text-sm text-neutral-500">Keep going</p>
           </div>
 
-          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+          <div className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-neutral-700">
             <p className="text-sm text-neutral-500">Progress</p>
 
             <p className="mt-3 text-3xl font-semibold">{progress}%</p>
@@ -280,7 +280,7 @@ if (activePage === "Settings") {
           <HabitList habits={habits} onToggle={toggleHabit} />
         </section>
         {/* Progress */}
-        <section className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+        <section className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/50 dark:hover:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-medium">Daily Progress</h2>
@@ -295,7 +295,7 @@ if (activePage === "Settings") {
 
           <div className="mt-5 h-2 overflow-hidden rounded-full bg-neutral-800">
             <div
-              className="h-full rounded-full bg-white transition-all duration-500"
+              className="h-full rounded-full bg-black transition-all duration-700 ease-out dark:bg-white"
               style={{ width: `${progress}%` }}
             />
           </div>
