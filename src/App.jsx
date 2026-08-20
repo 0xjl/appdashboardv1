@@ -1,40 +1,29 @@
+import { useEffect, useState } from "react";
 import AppLayout from "./components/layout/AppLayout";
+import TaskList from "./components/tasks/TaskList";
+import AddTask from "./components/tasks/AddTask";
 
-const stats = [
+const defaultTasks = [
   {
-    label: "Tasks",
-    value: "8",
-    description: "3 remaining",
-  },
-  {
-    label: "Habits",
-    value: "5",
-    description: "2 completed today",
-  },
-  {
-    label: "Progress",
-    value: "72%",
-    description: "Great momentum",
-  },
-];
-
-const tasks = [
-  {
+    id: 1,
     title: "Finish portfolio website",
     category: "Work",
     completed: false,
   },
   {
+    id: 2,
     title: "Go for a run",
     category: "Health",
     completed: true,
   },
   {
+    id: 3,
     title: "Study React",
     category: "Learning",
     completed: false,
   },
   {
+    id: 4,
     title: "Read for 30 minutes",
     category: "Personal",
     completed: false,
@@ -42,9 +31,62 @@ const tasks = [
 ];
 
 function App() {
+  const [tasks, setTasks] = useState(() => {
+    const savedTasks = localStorage.getItem("dayflow-tasks");
+
+    return savedTasks
+      ? JSON.parse(savedTasks)
+      : defaultTasks;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "dayflow-tasks",
+      JSON.stringify(tasks)
+    );
+  }, [tasks]);
+
+  function addTask(task) {
+    setTasks((currentTasks) => [
+      ...currentTasks,
+      task,
+    ]);
+  }
+
+  function toggleTask(id) {
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === id
+          ? {
+              ...task,
+              completed: !task.completed,
+            }
+          : task
+      )
+    );
+  }
+
+  function deleteTask(id) {
+    setTasks((currentTasks) =>
+      currentTasks.filter((task) => task.id !== id)
+    );
+  }
+
+  const completedTasks = tasks.filter(
+    (task) => task.completed
+  ).length;
+
+  const progress =
+    tasks.length === 0
+      ? 0
+      : Math.round(
+          (completedTasks / tasks.length) * 100
+        );
+
   return (
     <AppLayout>
       <div className="space-y-8">
+
         {/* Header */}
         <header>
           <p className="text-sm text-neutral-500">
@@ -62,29 +104,55 @@ function App() {
 
         {/* Stats */}
         <section className="grid gap-4 sm:grid-cols-3">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5"
-            >
-              <p className="text-sm text-neutral-500">
-                {stat.label}
-              </p>
 
-              <p className="mt-3 text-3xl font-semibold">
-                {stat.value}
-              </p>
+          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+            <p className="text-sm text-neutral-500">
+              Tasks
+            </p>
 
-              <p className="mt-1 text-sm text-neutral-500">
-                {stat.description}
-              </p>
-            </div>
-          ))}
+            <p className="mt-3 text-3xl font-semibold">
+              {tasks.length}
+            </p>
+
+            <p className="mt-1 text-sm text-neutral-500">
+              {tasks.length - completedTasks} remaining
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+            <p className="text-sm text-neutral-500">
+              Completed
+            </p>
+
+            <p className="mt-3 text-3xl font-semibold">
+              {completedTasks}
+            </p>
+
+            <p className="mt-1 text-sm text-neutral-500">
+              Keep going
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+            <p className="text-sm text-neutral-500">
+              Progress
+            </p>
+
+            <p className="mt-3 text-3xl font-semibold">
+              {progress}%
+            </p>
+
+            <p className="mt-1 text-sm text-neutral-500">
+              Daily completion
+            </p>
+          </div>
+
         </section>
 
         {/* Tasks */}
-        <section className="rounded-2xl border border-neutral-800 bg-neutral-900/50">
-          <div className="border-b border-neutral-800 p-5">
+        <section className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/50">
+
+          <div className="p-5">
             <h2 className="font-medium">
               Today's Tasks
             </h2>
@@ -94,69 +162,58 @@ function App() {
             </p>
           </div>
 
-          <div className="divide-y divide-neutral-800">
-            {tasks.map((task) => (
-              <div
-                key={task.title}
-                className="flex items-center gap-4 p-5"
-              >
-                <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                    task.completed
-                      ? "border-white bg-white text-black"
-                      : "border-neutral-600"
-                  }`}
-                >
-                  {task.completed && (
-                    <span className="text-xs">✓</span>
-                  )}
-                </div>
+          <AddTask onAdd={addTask} />
 
-                <div className="flex-1">
-                  <p
-                    className={
-                      task.completed
-                        ? "text-neutral-500 line-through"
-                        : ""
-                    }
-                  >
-                    {task.title}
-                  </p>
+          {tasks.length > 0 ? (
+            <TaskList
+              tasks={tasks}
+              onToggle={toggleTask}
+              onDelete={deleteTask}
+            />
+          ) : (
+            <div className="p-10 text-center">
+              <p className="text-sm text-neutral-500">
+                No tasks yet.
+              </p>
 
-                  <p className="mt-1 text-xs text-neutral-600">
-                    {task.category}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+              <p className="mt-1 text-xs text-neutral-700">
+                Add something above to get started.
+              </p>
+            </div>
+          )}
+
         </section>
 
         {/* Progress */}
         <section className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-5">
+
           <div className="flex items-center justify-between">
+
             <div>
               <h2 className="font-medium">
                 Daily Progress
               </h2>
 
               <p className="mt-1 text-sm text-neutral-500">
-                You're making good progress today.
+                You're {progress}% through your tasks.
               </p>
             </div>
 
             <span className="text-2xl font-semibold">
-              72%
+              {progress}%
             </span>
+
           </div>
 
           <div className="mt-5 h-2 overflow-hidden rounded-full bg-neutral-800">
             <div
-              className="h-full rounded-full bg-white"
-              style={{ width: "72%" }}
+              className="h-full rounded-full bg-white transition-all duration-500"
+              style={{ width: `${progress}%` }}
             />
           </div>
+
         </section>
+
       </div>
     </AppLayout>
   );
