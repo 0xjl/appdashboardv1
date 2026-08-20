@@ -1,15 +1,24 @@
 import Sidebar from "./Sidebar";
 
-function AppLayout({ children }) {
+function AppLayout({
+  children,
+  activePage,
+  onNavigate,
+}) {
   return (
     <div className="min-h-screen bg-neutral-950">
-      <Sidebar />
+
+      <Sidebar
+        activePage={activePage}
+        onNavigate={onNavigate}
+      />
 
       <main className="min-h-screen md:ml-64">
         <div className="mx-auto max-w-7xl p-6 md:p-8">
           {children}
         </div>
       </main>
+
     </div>
   );
 }

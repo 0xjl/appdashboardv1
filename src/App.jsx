@@ -3,6 +3,7 @@ import AppLayout from "./components/layout/AppLayout";
 import TaskList from "./components/tasks/TaskList";
 import AddTask from "./components/tasks/AddTask";
 import HabitList from "./components/habits/HabitList";
+import Analytics from "./components/analytics/Analytics";
 
 const defaultTasks = [
   {
@@ -65,19 +66,17 @@ const defaultHabits = [
 function App() {
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("dayflow-tasks");
-
     return savedTasks
       ? JSON.parse(savedTasks)
       : defaultTasks;
   });
-
   const [habits, setHabits] = useState(() => {
   const savedHabits = localStorage.getItem("dayflow-habits");
-
   return savedHabits
     ? JSON.parse(savedHabits)
     : defaultHabits;
 });
+const [activePage, setActivePage] = useState("Today");
 
 useEffect(() => {
   localStorage.setItem(
@@ -160,8 +159,25 @@ useEffect(() => {
           (completedTasks / tasks.length) * 100
         );
 
+        if (activePage === "Analytics") {
+    return (
+      <AppLayout
+        activePage={activePage}
+        onNavigate={setActivePage}
+      >
+        <Analytics
+          tasks={tasks}
+          habits={habits}
+        />
+      </AppLayout>
+    );
+  }
+
   return (
-    <AppLayout>
+     <AppLayout
+      activePage={activePage}
+      onNavigate={setActivePage}
+    >
       <div className="space-y-8">
 
         {/* Header */}
