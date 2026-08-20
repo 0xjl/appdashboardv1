@@ -6,8 +6,7 @@ function AppLayout({
   onNavigate,
 }) {
   return (
-    <div className="min-h-screen bg-neutral-950">
-
+    <div className="min-h-screen bg-white text-neutral-950 dark:bg-neutral-950 dark:text-white">
       <Sidebar
         activePage={activePage}
         onNavigate={onNavigate}
@@ -18,7 +17,6 @@ function AppLayout({
           {children}
         </div>
       </main>
-
     </div>
   );
 }

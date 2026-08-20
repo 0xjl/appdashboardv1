@@ -3,6 +3,7 @@ const navigation = [
   "Tasks",
   "Habits",
   "Analytics",
+  "Settings",
 ];
 
 function Sidebar({

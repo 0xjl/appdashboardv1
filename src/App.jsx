@@ -5,6 +5,7 @@ import AddTask from "./components/tasks/AddTask";
 import HabitList from "./components/habits/HabitList";
 import Analytics from "./components/analytics/Analytics";
 import CommandPalette from "./components/command/CommandPalette";
+import Settings from "./components/settings/Settings";
 
 const defaultTasks = [
   {
@@ -65,6 +66,12 @@ const defaultHabits = [
 ];
 
 function App() {
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("dayflow-theme") || "dark";
+  });
+  const [accent, setAccent] = useState(() => {
+    return localStorage.getItem("dayflow-accent") || "white";
+  });
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("dayflow-tasks");
     return savedTasks ? JSON.parse(savedTasks) : defaultTasks;
@@ -74,6 +81,14 @@ function App() {
     return savedHabits ? JSON.parse(savedHabits) : defaultHabits;
   });
   const [activePage, setActivePage] = useState("Today");
+
+  useEffect(() => {
+    localStorage.setItem("dayflow-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    localStorage.setItem("dayflow-accent", accent);
+  }, [accent]);
 
   useEffect(() => {
     localStorage.setItem("dayflow-habits", JSON.stringify(habits));
@@ -139,17 +154,46 @@ function App() {
   const progress =
     tasks.length === 0 ? 0 : Math.round((completedTasks / tasks.length) * 100);
 
-  if (activePage === "Analytics") {
-    return (
-      <AppLayout activePage={activePage} onNavigate={setActivePage}>
-        <Analytics tasks={tasks} habits={habits} />
+if (activePage === "Analytics") {
+  return (
+    <AppLayout
+      activePage={activePage}
+      onNavigate={setActivePage}
+    >
+      <Analytics
+        tasks={tasks}
+        habits={habits}
+      />
 
-        <CommandPalette onNavigate={setActivePage} />
-      </AppLayout>
-    );
-  }
+      <CommandPalette
+        onNavigate={setActivePage}
+      />
+    </AppLayout>
+  );
+}
+
+if (activePage === "Settings") {
+  return (
+    <AppLayout
+      activePage={activePage}
+      onNavigate={setActivePage}
+    >
+      <Settings
+        theme={theme}
+        setTheme={setTheme}
+        accent={accent}
+        setAccent={setAccent}
+      />
+
+      <CommandPalette
+        onNavigate={setActivePage}
+      />
+    </AppLayout>
+  );
+}
 
   return (
+    <div className={theme === "dark" ? "dark" : ""}>
     <AppLayout activePage={activePage} onNavigate={setActivePage}>
       <div className="space-y-8">
         {/* Header */}
@@ -259,6 +303,7 @@ function App() {
       </div>
       <CommandPalette onNavigate={setActivePage} />
     </AppLayout>
+    </div>
   );
 }
 
