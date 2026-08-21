@@ -67,8 +67,15 @@ const defaultHabits = [
 
 function App() {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("dayflow-theme") || "dark";
-  });
+  return localStorage.getItem("dayflow-theme") || "dark";
+});
+
+useEffect(() => {
+  document.documentElement.classList.toggle(
+    "dark",
+    theme === "dark"
+  );
+}, [theme]);
   const [accent, setAccent] = useState(() => {
     return localStorage.getItem("dayflow-accent") || "white";
   });
@@ -193,7 +200,6 @@ if (activePage === "Settings") {
 }
 
   return (
-    <div className={theme === "dark" ? "dark" : ""}>
     <AppLayout activePage={activePage} onNavigate={setActivePage}>
       <div className="space-y-8">
         {/* Header */}
@@ -303,7 +309,6 @@ if (activePage === "Settings") {
       </div>
       <CommandPalette onNavigate={setActivePage} />
     </AppLayout>
-    </div>
   );
 }
 
