@@ -1,3 +1,4 @@
 Just building a dashboard tracker
 
-<img width="1826" height="909" alt="image" src="https://github.com/user-attachments/assets/fb7958c6-c0f4-4473-85b7-bc31c5ceb9bc" />
+<img width="2192" height="791" alt="image" src="https://github.com/user-attachments/assets/1f23d1e2-de6d-4095-9819-7efcac959055" />
+
