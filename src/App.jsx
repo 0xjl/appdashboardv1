@@ -6,6 +6,8 @@ import HabitList from "./components/habits/HabitList";
 import Analytics from "./components/analytics/Analytics";
 import CommandPalette from "./components/command/CommandPalette";
 import Settings from "./components/settings/Settings";
+import Tasks from "./components/tasks/Tasks";
+import Habits from "./components/habits/Habits";
 
 const defaultTasks = [
   {
@@ -67,15 +69,12 @@ const defaultHabits = [
 
 function App() {
   const [theme, setTheme] = useState(() => {
-  return localStorage.getItem("dayflow-theme") || "dark";
-});
+    return localStorage.getItem("dayflow-theme") || "dark";
+  });
 
-useEffect(() => {
-  document.documentElement.classList.toggle(
-    "dark",
-    theme === "dark"
-  );
-}, [theme]);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
   const [accent, setAccent] = useState(() => {
     return localStorage.getItem("dayflow-accent") || "white";
   });
@@ -161,43 +160,55 @@ useEffect(() => {
   const progress =
     tasks.length === 0 ? 0 : Math.round((completedTasks / tasks.length) * 100);
 
-if (activePage === "Analytics") {
-  return (
-    <AppLayout
-      activePage={activePage}
-      onNavigate={setActivePage}
-    >
-      <Analytics
-        tasks={tasks}
-        habits={habits}
-      />
+  if (activePage === "Analytics") {
+    return (
+      <AppLayout activePage={activePage} onNavigate={setActivePage}>
+        <Analytics tasks={tasks} habits={habits} />
 
-      <CommandPalette
-        onNavigate={setActivePage}
-      />
-    </AppLayout>
-  );
-}
+        <CommandPalette onNavigate={setActivePage} />
+      </AppLayout>
+    );
+  }
 
-if (activePage === "Settings") {
-  return (
-    <AppLayout
-      activePage={activePage}
-      onNavigate={setActivePage}
-    >
-      <Settings
-        theme={theme}
-        setTheme={setTheme}
-        accent={accent}
-        setAccent={setAccent}
-      />
+  if (activePage === "Settings") {
+    return (
+      <AppLayout activePage={activePage} onNavigate={setActivePage}>
+        <Settings
+          theme={theme}
+          setTheme={setTheme}
+          accent={accent}
+          setAccent={setAccent}
+        />
 
-      <CommandPalette
-        onNavigate={setActivePage}
-      />
-    </AppLayout>
-  );
-}
+        <CommandPalette onNavigate={setActivePage} />
+      </AppLayout>
+    );
+  }
+
+  if (activePage === "Tasks") {
+    return (
+      <AppLayout activePage={activePage} onNavigate={setActivePage}>
+        <Tasks
+          tasks={tasks}
+          onAdd={addTask}
+          onToggle={toggleTask}
+          onDelete={deleteTask}
+        />
+
+        <CommandPalette onNavigate={setActivePage} />
+      </AppLayout>
+    );
+  }
+
+  if (activePage === "Habits") {
+    return (
+      <AppLayout activePage={activePage} onNavigate={setActivePage}>
+        <Habits habits={habits} onToggle={toggleHabit} />
+
+        <CommandPalette onNavigate={setActivePage} />
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout activePage={activePage} onNavigate={setActivePage}>
