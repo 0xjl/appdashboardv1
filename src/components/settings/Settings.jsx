@@ -1,9 +1,4 @@
-function Settings({
-  theme,
-  setTheme,
-  accent,
-  setAccent,
-}) {
+function Settings({ theme, setTheme, accent, setAccent }) {
   const accents = [
     { name: "White", value: "white" },
     { name: "Blue", value: "blue" },
@@ -14,25 +9,17 @@ function Settings({
   return (
     <div className="space-y-8">
       <header>
-        <p className="text-sm text-neutral-500">
-          Customize your experience
-        </p>
+        <p className="text-sm text-neutral-500">Customize your experience</p>
 
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-          Settings
-        </h1>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight">Settings</h1>
 
-        <p className="mt-2 text-neutral-400">
-          Make DayFlow feel like yours.
-        </p>
+        <p className="mt-2 text-neutral-400">Make DayFlow feel like yours.</p>
       </header>
 
       {/* Appearance */}
 
       <section className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6">
-        <h2 className="font-medium">
-          Appearance
-        </h2>
+        <h2 className="font-medium">Appearance</h2>
 
         <p className="mt-1 text-sm text-neutral-500">
           Choose how DayFlow looks.
@@ -66,9 +53,7 @@ function Settings({
       {/* Accent */}
 
       <section className="rounded-2xl border border-neutral-800 bg-neutral-900/50 p-6">
-        <h2 className="font-medium">
-          Accent Color
-        </h2>
+        <h2 className="font-medium">Accent Color</h2>
 
         <p className="mt-1 text-sm text-neutral-500">
           Choose your interface accent.
@@ -79,12 +64,25 @@ function Settings({
             <button
               key={item.value}
               onClick={() => setAccent(item.value)}
-              className={`rounded-xl border px-4 py-3 text-sm transition ${
+              className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-sm transition ${
                 accent === item.value
-                  ? "border-white"
-                  : "border-neutral-800"
+                  ? "border-neutral-950 dark:border-white"
+                  : "border-neutral-200 dark:border-neutral-800"
               }`}
             >
+              <span
+                className="h-4 w-4 rounded-full"
+                style={{
+                  backgroundColor:
+                    item.value === "white"
+                      ? "#171717"
+                      : item.value === "blue"
+                        ? "#2563eb"
+                        : item.value === "purple"
+                          ? "#7c3aed"
+                          : "#16a34a",
+                }}
+              />
               {item.name}
             </button>
           ))}

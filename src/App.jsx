@@ -69,15 +69,23 @@ const defaultHabits = [
 
 function App() {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("dayflow-theme") || "dark";
-  });
+  return localStorage.getItem("dayflow-theme") || "dark";
+});
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
-  const [accent, setAccent] = useState(() => {
-    return localStorage.getItem("dayflow-accent") || "white";
-  });
+const [accent, setAccent] = useState(() => {
+  return localStorage.getItem("dayflow-accent") || "white";
+});
+
+useEffect(() => {
+  document.documentElement.classList.toggle(
+    "dark",
+    theme === "dark"
+  );
+}, [theme]);
+
+useEffect(() => {
+  document.documentElement.dataset.accent = accent;
+}, [accent]);
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("dayflow-tasks");
     return savedTasks ? JSON.parse(savedTasks) : defaultTasks;

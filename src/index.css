@@ -11,3 +11,28 @@ body {
   min-width: 320px;
   font-family: Inter, system-ui, sans-serif;
 }
+
+:root {
+  --accent: #171717;
+  --accent-foreground: #ffffff;
+}
+
+:root[data-accent="white"] {
+  --accent: #171717;
+  --accent-foreground: #ffffff;
+}
+
+:root[data-accent="blue"] {
+  --accent: #2563eb;
+  --accent-foreground: #ffffff;
+}
+
+:root[data-accent="purple"] {
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+}
+
+:root[data-accent="green"] {
+  --accent: #16a34a;
+  --accent-foreground: #ffffff;
+}
