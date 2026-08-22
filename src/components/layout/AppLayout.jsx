@@ -1,4 +1,4 @@
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import MobileNav from "./MobileNav";
 
 function AppLayout({ children, activePage, onNavigate }) {
